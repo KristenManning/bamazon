@@ -40,23 +40,31 @@ function selectProduct(){
 					  message: "How many units would you like to buy?"}
 					]).then(function(data){
 						var quant = data.quant
-						// connection.query('SELECT * from products WHERE id = ?', [product_id], function (error, results, fields) {
-						//   if (error) throw error;
-						//   if (quant > results[0].stock_quantity){
-						//   	console.log("Insufficient quantity!")
-						//   	console.log("Please choose a lower quantity or select a different product.")
-						//   	console.log("Current " + results[0].product_name + " inventory: " + results[0].stock_quantity)
-						//   	selectProduct()
-						//   }else{
-						//   	console.log("Order complete.")
-						//   	connection.query('INSERT INTO sales (product_id, quantity purchased) VALUES (?,?)', [product_id, quant], function (error, results, fields) {
-						// 	  if (error) throw error;
+						connection.query('SELECT * from products WHERE id = ?', [product_id], function (error, results, fields) {
+						  if (error) throw error;
+						  product_name = results[0].product_name
+						  product_price = results[0].price
+						  in_stock = results[0].stock_quantity
+						  if (quant > in_stock){
+						  	console.log("Insufficient quantity!")
+						  	console.log("Please choose a lower quantity or select a different product.")
+						  	console.log("Current " + product_name + " inventory: " + in_stock)
+						  	selectProduct()
+						  }else{
+						  	console.log("Purchase complete.")
+						  	var new_row = {product_id: product_id, quantity_purchased: quant}
+						  	connection.query('INSERT INTO sales SET ?', new_row, function (error, results, fields) {
+							  if (error) throw error;
 							  
-						// 	  console.log(results)
-						//   })
-						//   }
+							  console.log("Item: " + product_name)
+							  console.log("Quantity Purchased: " + quant)
+							  console.log("Unit Price: $" + product_price)
+							  console.log("*******************************")
+							  console.log("Total Transaction Cost: $" + product_price*quant)
+						  })
+						  }
 
-						//   })
+						  })
 						});
 					});
 				//do an insert into mysql 
