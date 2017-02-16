@@ -23,15 +23,58 @@ function displayProducts(){
 	  	// console.log("Quantity Remaining: ", results[item].stock_quantity)
 	  	console.log("--------------------------------------------")
 	  }
+	  selectProduct();
 	});
 }
 
+function selectProduct(){
+	inquirer.prompt([
+			{type: "input",
+			  name: "product_id",
+			  message: "Select a product with its ID. "}
+			]).then(function(data){
+				var product_id = data.product_id
+				inquirer.prompt([
+					{type: "input",
+					  name: "quant",
+					  message: "How many units would you like to buy?"}
+					]).then(function(data){
+						var quant = data.quant
+						// connection.query('SELECT * from products WHERE id = ?', [product_id], function (error, results, fields) {
+						//   if (error) throw error;
+						//   if (quant > results[0].stock_quantity){
+						//   	console.log("Insufficient quantity!")
+						//   	console.log("Please choose a lower quantity or select a different product.")
+						//   	console.log("Current " + results[0].product_name + " inventory: " + results[0].stock_quantity)
+						//   	selectProduct()
+						//   }else{
+						//   	console.log("Order complete.")
+						//   	connection.query('INSERT INTO sales (product_id, quantity purchased) VALUES (?,?)', [product_id, quant], function (error, results, fields) {
+						// 	  if (error) throw error;
+							  
+						// 	  console.log(results)
+						//   })
+						//   }
+
+						//   })
+						});
+					});
+				//do an insert into mysql 
+				// connection.query('INSERT into dranken_beers SET ?', {
+				// 	beer_id : data.beer_id,
+				// 	department_id : department
+				// }, function (error, results, fields) {
+				// 	console.log('insert complete')
+				// });
+
+}
+
+
 console.log("")
-console.log("CURRENT INVENTORY: ")
+console.log("ITEMS AVAILABLE FOR SALE: ")
 console.log("")
 displayProducts()
-
-connection.end();
+// connection.end();
 
 // connection.query('SELECT * from departments', function (error, results, fields)
 // {
