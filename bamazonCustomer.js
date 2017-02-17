@@ -19,7 +19,7 @@ function displayProducts(){
 	  	console.log("")
 	  	console.log("ID: ", results[item].id)
 	  	// console.log("Department ID: ", results[item].department_id)
-	  	console.log("Price: ", results[item].price)
+	  	console.log("Price: $", results[item].price)
 	  	// console.log("Quantity Remaining: ", results[item].stock_quantity)
 	  	console.log("--------------------------------------------")
 	  }
@@ -60,20 +60,27 @@ function selectProduct(){
 							  console.log("Quantity Purchased: " + quant)
 							  console.log("Unit Price: $" + product_price)
 							  console.log("*******************************")
-							  console.log("Total Transaction Cost: $" + product_price*quant)
-						  })
+							  console.log("Transaction Cost: $" + product_price*quant)
+
+							  inquirer.prompt([
+									{type: "list",
+									  name: "continue",
+									  choices: ["Yes", "No"],
+									  message: "Would you like to continue shopping?"}
+									]).then(function(data){
+											if (data.continue == "Yes"){
+												selectProduct()
+											}else{
+												connection.end()
+											}
+										})
+						  	})
 						  }
 
-						  })
-						});
+						})
 					});
-				//do an insert into mysql 
-				// connection.query('INSERT into dranken_beers SET ?', {
-				// 	beer_id : data.beer_id,
-				// 	department_id : department
-				// }, function (error, results, fields) {
-				// 	console.log('insert complete')
-				// });
+				});
+
 
 }
 
