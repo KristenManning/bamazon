@@ -31,7 +31,7 @@ function selectProduct(){
 	inquirer.prompt([
 			{type: "input",
 			  name: "product_id",
-			  message: "Why product would you like to buy? (Please input its ID)"}
+			  message: "Which product would you like to buy? (Please input its ID)"}
 			]).then(function(data){
 				var product_id = data.product_id
 				inquirer.prompt([
