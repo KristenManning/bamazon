@@ -15,7 +15,7 @@ function displayProducts(){
 	connection.query('SELECT * from products', function (error, results, fields) {
 	  if (error) throw error;
 	  for (item in results){
-	  	console.log(results[item].product_name)
+	  	console.log("\033[1m" + results[item].product_name + "\033[0m")
 	  	console.log("")
 	  	console.log("ID: ", results[item].id)
 	  	// console.log("Department ID: ", results[item].department_id)
@@ -31,7 +31,7 @@ function selectProduct(){
 	inquirer.prompt([
 			{type: "input",
 			  name: "product_id",
-			  message: "Select a product with its ID. "}
+			  message: "Why product would you like to buy? (Please input its ID)"}
 			]).then(function(data){
 				var product_id = data.product_id
 				inquirer.prompt([

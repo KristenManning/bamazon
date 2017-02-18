@@ -15,7 +15,7 @@ function viewProductsForSale(){
 	connection.query('SELECT * from products', function (error, results, fields) {
 	  if (error) throw error;
 	  for (item in results){
-	  	console.log(results[item].product_name)
+	  	console.log("\033[1m" + results[item].product_name + "\033[0m")
 	  	console.log("")
 	  	console.log("ID: ", results[item].id)
 	  	// console.log("Department ID: ", results[item].department_id)
@@ -31,7 +31,7 @@ function viewLowInv(){
 	connection.query('SELECT * FROM products WHERE stock_quantity < 5', function (error, results, fields) {
 	  if (error) throw error;
 	  for (item in results){
-	  	console.log(results[item].product_name)
+	  	console.log("\033[1m" + results[item].product_name + "\033[0m")
 	  	console.log("")
 	  	console.log("ID: ", results[item].id)
 	  	// console.log("Department ID: ", results[item].department_id)
@@ -41,6 +41,77 @@ function viewLowInv(){
 	  }
 	  checkIfDone()
 	});
+}
+
+function addToInv(){
+	inquirer.prompt([
+			{type: "input",
+			  name: "product_id",
+			  message: "Which product would you like to add? (Please input its ID)"}
+			]).then(function(data){
+				var product_id = data.product_id
+
+				inquirer.prompt([
+					{type: "input",
+					  name: "quant",
+					  message: "How many units would you like to add?"}
+					]).then(function(data){
+					var quant = data.quant
+
+					connection.query('UPDATE products SET stock_quantity = (stock_quantity + ?) WHERE id = ?',[quant, product_id], function (error, results, fields) {
+					if (error) throw error;
+					   console.log("Inventory has been updated.")
+	  				checkIfDone()
+	});
+				});
+			});
+	
+
+}
+
+
+function addProduct(){
+	console.log("Please input the following information about the product you would like to add.")
+	inquirer.prompt([
+			{type: "input",
+			  name: "product_name",
+			  message: "Product Name: "}
+			]).then(function(data){
+				var product_name = data.product_name
+
+		inquirer.prompt([
+			{type: "input",
+			  name: "department_id",
+			  message: "Department ID: "}
+			]).then(function(data){
+				var department_id = data.department_id
+
+			inquirer.prompt([
+				{type: "input",
+				  name: "price",
+				  message: "Price: $"}
+				]).then(function(data){
+					var price = data.price
+
+				inquirer.prompt([
+					{type: "input",
+					  name: "stock_quantity",
+					  message: "Quantity: "}
+					]).then(function(data){
+						var stock_quantity = data.stock_quantity
+
+						var new_row = {product_name: product_name, department_id: department_id, price: price, stock_quantity: stock_quantity}
+						connection.query('INSERT INTO products SET ?', new_row, function  (error, results, fields) {
+						if (error) throw error;
+						   console.log("Inventory has been updated.")
+						   checkIfDone()
+						});
+		  				
+					});
+				});
+			});
+		});
+
 }
 
 function checkIfDone(){
@@ -77,10 +148,10 @@ function selectAction(){
 				        viewLowInv()
 				        break;
 				    case "Add to Inventory":
-				        console.log("A2I")
+				        addToInv()
 				        break;
 				    case "Add New Product":
-				        console.log("ANP")
+				        addProduct()
 				        break;
 				}
 			})
